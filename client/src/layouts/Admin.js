@@ -81,17 +81,17 @@ export default function Admin({ ...rest }) {
   const { alert, removeAlert } = alertContext;
   const { loadUser, isAuthenticated } = authContext;
 
-  // useEffect(() => {
-  //   loadUser();
-  //   // eslint-disable-next-line
-  // }, []);
+  useEffect(() => {
+    loadUser();
+    // eslint-disable-next-line
+  }, []);
 
-  // useEffect(() => {
-  //   if (!isAuthenticated) {
-  //     rest.history.push('/home/signin');
-  //   }
-  //   // eslint-disable-next-line
-  // }, [isAuthenticated, rest.history]);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      rest.history.push('/home/signin');
+    }
+    // eslint-disable-next-line
+  }, [isAuthenticated, rest.history]);
 
   useEffect(() => {
     if (alert && alert.msg) {

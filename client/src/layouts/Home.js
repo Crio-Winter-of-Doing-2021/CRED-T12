@@ -75,10 +75,10 @@ export default function Home({ ...rest }) {
   const { alert, removeAlert } = alertContext;
   const { loadUser } = authContext;
 
-  // useEffect(() => {
-  //   loadUser();
-  //   // eslint-disable-next-line
-  // }, []);
+  useEffect(() => {
+    loadUser();
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (alert && alert.msg) {
