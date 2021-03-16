@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useMemo } from 'react';
 import Cards from 'react-credit-cards';
 import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
@@ -45,31 +45,54 @@ const AddCard = props => {
   const { setAlert } = alertContext;
   const { register, error, clearErrors, isAuthenticated, loading } = authContext;
 
-  const [cardDetails, setCardDetails] = useState({
-    cvc: '',
-    expiry: '',
-    name: '',
-    number: '',
-    focus: '',
-  });
+	const numberRegExp = useMemo(() => /^[1-9]{1}[0-9]{15}$/, []);
+  const expiryRegExp = useMemo(() => /^[0-9]{2}\/[0-9]{2}$/, []);
 
-  const { cvc, expiry, name, number, focus } = cardDetails;
+  const [cvc, setCvc] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+  const [focus, setFocus] = useState('');
+  const [isNumberValid, validateNumber] = useState(true);
+  const [isExpiryValid, validateExpiry] = useState(true);
 
-  const onChange = e => setCardDetails({ ...cardDetails, [e.target.name]: e.target.value });
-  const handleInputFocus = (e) => setCardDetails({ ...cardDetails, focus: e.target.name });
+  const isSubmitDisabled = !cvc.trim() || !expiry.trim() || !name.trim() || !number.trim() || !isNumberValid || !isExpiryValid;
+
+  useEffect(() => {
+		validateNumber(number && numberRegExp.test(number));
+	}, [number, numberRegExp]);
+
+  useEffect(() => {
+		validateExpiry(expiry && expiryRegExp.test(expiry));
+	}, [expiry, expiryRegExp]);
 
   const onSubmit = e => {
     e.preventDefault();
-    if (cvc.trim() === '' || expiry.trim() === '' || name.trim() === '' || number.trim() === '') {
+    if (!isNumberValid) {
+      setAlert('Please enter correct card number', 'error');
+			return;
+		}
+    if (!isExpiryValid) {
+      setAlert('Please enter correct expiry format MM/YY', 'error');
+			return;
+		}
+    if (isSubmitDisabled) {
       setAlert('Please enter all fields', 'error');
-    } else {
-      console.log(cvc.trim(), expiry.trim(), name.trim(), number.trim());
-      // register({
-      //   username,
-      //   email,
-      //   password
-      // });
-    }
+			return;
+		}
+    console.log(cvc.trim(), expiry.trim(), name.trim(), number.trim());
+    // register({
+    //   username,
+    //   email,
+    //   password
+    // });
+  };
+
+  const onNumberChange = e => {
+    e.preventDefault();
+    let value = e.target.value.trim();
+    if(value.length > 16) return;
+    setNumber(value);
   };
 
   return (
@@ -93,9 +116,9 @@ const AddCard = props => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                type="tel"
+                type="number"
                 name="number"
-                placeholder="Card Number"
+                placeholder="XXXX XXXX XXXX XXXX"
                 variant="outlined"
                 required
                 fullWidth
@@ -103,26 +126,26 @@ const AddCard = props => {
                 label="Card Number"
                 autoFocus
                 value={number}
-                onChange={onChange}
-                onFocus={handleInputFocus}
+                onChange={onNumberChange}
+                onFocus={({ currentTarget: { value } }) => setFocus(value)}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 type="text"
                 name="name"
-                placeholder="Name"
+                placeholder="Card Holder Name"
                 variant="outlined"
                 required
                 fullWidth
                 id="name"
                 label="Name"
                 value={name}
-                onChange={onChange}
-                onFocus={handleInputFocus}
+                onChange={({ currentTarget: { value } }) => setName(value)}
+                onFocus={({ currentTarget: { value } }) => setFocus(value)}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 type="text"
                 name="expiry"
@@ -133,11 +156,11 @@ const AddCard = props => {
                 id="expiry"
                 label="Expiry"
                 value={expiry}
-                onChange={onChange}
-                onFocus={handleInputFocus}
+                onChange={({ currentTarget: { value } }) => setExpiry(value)}
+                onFocus={({ currentTarget: { value } }) => setFocus(value)}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 type="tel"
                 name="cvc"
@@ -148,8 +171,8 @@ const AddCard = props => {
                 id="cvc"
                 label="CVC"
                 value={cvc}
-                onChange={onChange}
-                onFocus={handleInputFocus}
+                onChange={({ currentTarget: { value } }) => setCvc(value)}
+                onFocus={({ currentTarget: { value } }) => setFocus(value)}
               />
             </Grid>
           </Grid>
