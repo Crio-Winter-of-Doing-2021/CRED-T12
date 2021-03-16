@@ -12,7 +12,7 @@ var Card = new Schema({
         type: String,
         required: true
     },
-    cardNumber: {
+    number: {
         type: Number,
         required: true
     },
@@ -20,7 +20,7 @@ var Card = new Schema({
         type: String,
         required: true
     },
-    nameOnCard: {
+    name: {
         type: String,
         required: true
     },
@@ -31,6 +31,10 @@ var Card = new Schema({
     billingAmount: {
         type: Number,
         default: 0
+    },
+    cvc:{
+        type: Number,
+        required: true
     }
 },{
     timestamps: true

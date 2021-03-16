@@ -13,10 +13,11 @@ const {FullDateString} = require('../../../utils/dateFunctions');
     POST /add
     Add a new card
     Request body : {
-        "cardNumber": {type: "string"}, 
+        "number": {type: "number"}, 
         "bank": { type: "string" },
         "expiaryDate":{ type: "object" },
-        "nameOnCard":{type: "string" }
+        "name":{type: "string" },
+        "cvc":{type: "number"}
     }
  */
 exports.addCard = async (req, res, next) => {
@@ -30,12 +31,13 @@ exports.addCard = async (req, res, next) => {
                 res.status(status.StatusOk).setHeader('Content-Type', 'application/json');
                 return res.json({ success: state.faliure, message: "check the request body!" });
             }
-            if (!Luhn.isValid(reqBody.cardNumber)) {
+
+            if (!Luhn.isValid(reqBody.number.toString())) {
                 await res.status(status.StatusOk).setHeader('Content-Type', 'application/json');
                 return res.json({ success: state.faliure, message: "Invalid card number" });
             }
 
-            const alreadyAdded = await Card.exists({ cardNumber: reqBody.cardNumber });
+            const alreadyAdded = await Card.exists({ number: reqBody.number });
             if (alreadyAdded) {
                 res.status(status.StatusOk).setHeader('Content-Type', 'application/json');
                 return res.json({ success: state.faliure, message: "Card already added by someone else, please report if it belongs to you!" });
@@ -58,9 +60,10 @@ exports.addCard = async (req, res, next) => {
 
             const cardData = {
                 id: savedcard.id, 
-                cardNumber: savedcard.cardNumber,
+                number: savedcard.number,
                 bank: savedcard.bank,
-                nameOnCard: savedcard.nameOnCard,
+                name: savedcard.name,
+                cvc: savedcard.cvc,
                 expiaryDate: savedcard.expiaryDate,
                 billingAmount: savedcard.billingAmount
             }
@@ -95,9 +98,10 @@ exports.getAllCards = async (req, res, next) => {
             for (const card of cards) {
                 const cardData = {
                     id: card._id,
-                    cardNumber: card.cardNumber,
+                    number: card.number,
                     bank: card.bank,
-                    nameOnCard: card.nameOnCard,
+                    name: card.name,
+                    cvc: card.cvc,
                     expiaryDate: card.expiaryDate,
                     billingAmount: card.billingAmount
                 }
@@ -134,9 +138,10 @@ exports.getSingleCard = async (req, res, next) => {
             if (card) {
                 const cardData = {
                     id: card._id,
-                    cardNumber: card.cardNumber,
+                    number: card.number,
                     bank: card.bank,
-                    nameOnCard: card.nameOnCard,
+                    name: card.name,
+                    cvc: card.cvc,
                     expiaryDate: card.expiaryDate,
                     billingAmount: card.billingAmount
                 }
