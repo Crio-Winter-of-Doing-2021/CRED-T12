@@ -1,11 +1,12 @@
 exports.addCard = {
-    required: ["cardNumber","bank","expiaryDate","nameOnCard" ],
+    required: ["number","bank","expiaryDate","name", "cvc" ],
     allOf: [{
         properties: {
-            "cardNumber": {type: "string"}, 
+            "number": {type: "number"}, 
             "bank": { type: "string" },
             "expiaryDate":{ type: "object" },
-            "nameOnCard":{type: "string" }
+            "name":{type: "string" },
+            "cvc":{type: "number" }
         },
         additionalProperties: false
     }]
