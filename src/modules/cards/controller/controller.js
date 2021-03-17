@@ -13,11 +13,11 @@ const {FullDateString} = require('../../../utils/dateFunctions');
     POST /add
     Add a new card
     Request body : {
-        "number": {type: "number"}, 
+        "number": {type: "string"}, 
         "bank": { type: "string" },
         "expiaryDate":{ type: "object" },
         "name":{type: "string" },
-        "cvc":{type: "number"}
+        "cvc":{type: "string"}
     }
  */
 exports.addCard = async (req, res, next) => {
@@ -32,7 +32,7 @@ exports.addCard = async (req, res, next) => {
                 return res.json({ success: state.faliure, message: "check the request body!" });
             }
 
-            if (!Luhn.isValid(reqBody.number.toString())) {
+            if (!Luhn.isValid(reqBody.number)){
                 await res.status(status.StatusOk).setHeader('Content-Type', 'application/json');
                 return res.json({ success: state.faliure, message: "Invalid card number" });
             }
