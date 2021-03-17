@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1615909494246" clover="3.2.0">
-  <project timestamp="1615909494246" name="All files">
+<coverage generated="1615960043054" clover="3.2.0">
+  <project timestamp="1615960043054" name="All files">
     <metrics statements="495" coveredstatements="385" conditionals="104" coveredconditionals="54" methods="35" coveredmethods="32" elements="634" coveredelements="471" complexity="0" loc="495" ncloc="495" packages="12" files="25" classes="25"/>
     <package name="CRED-T12">
       <metrics statements="62" coveredstatements="55" conditionals="14" coveredconditionals="6" methods="9" coveredmethods="7"/>
