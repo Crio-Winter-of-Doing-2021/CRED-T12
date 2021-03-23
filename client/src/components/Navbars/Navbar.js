@@ -98,8 +98,8 @@ export default function Header(props) {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose} component={Link} to='/admin/card/add'>Add Card</MenuItem>
               <MenuItem onClick={handleClose} component={Link} to='/admin/card'>All Cards</MenuItem>
+              <MenuItem onClick={handleClose} component={Link} to='/admin/card/add'>Add Card</MenuItem>
             </Menu>
           </div>
         }

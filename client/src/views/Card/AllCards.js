@@ -21,13 +21,46 @@ const useStyles = makeStyles((theme) => ({
 const AllCards = props => {
   const classes = useStyles();
 
+  const data = [
+    {
+      bank: "visa",
+      cvc: "232",
+      expiaryDate: {
+      month: "12",
+      year: "23"
+      },
+      name: "Ashwani Yadav",
+      number: "4324324354546456"
+    },
+    {
+      bank: "visa",
+      cvc: "232",
+      expiaryDate: {
+      month: "12",
+      year: "23"
+      },
+      name: "Ashwani Yadav",
+      number: "5324324354546456"
+    },
+    {
+      bank: "visa",
+      cvc: "232",
+      expiaryDate: {
+      month: "12",
+      year: "23"
+      },
+      name: "Ashwani Yadav",
+      number: "6024324354546456"
+    }
+  ]
+
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12}>
         <Grid container justify="center" spacing={2}>
-          {[0, 1, 2, 3, 4, 5, 6, 7].map((value) => (
-            <Grid key={value} item>
-              <SingleCard />
+          {data.map((value) => (
+            <Grid key={value.number} item>
+              <SingleCard data={value} />
             </Grid>
           ))}
         </Grid>
