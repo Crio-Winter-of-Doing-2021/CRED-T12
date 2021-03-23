@@ -15,6 +15,19 @@ import 'react-credit-cards/es/styles-compiled.css';
 
 import AlertContext from '../../context/alert/alertContext';
 import AuthContext from '../../context/auth/authContext';
+import CardContext from '../../context/card/cardContext';
+
+const supportedCards = {
+  '506699': 'Elo',
+  '6011': 'Discover',
+  '37': 'american express',
+  '36': 'Diners Club International',
+  '55': 'mastercard',
+  '60': 'Hipercard',
+  '62': 'Union Pay',
+  '4': 'visa',
+};
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,9 +54,11 @@ const AddCard = props => {
   const classes = useStyles();
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
+  const cardContext = useContext(CardContext);
 
   const { setAlert } = alertContext;
-  const { register, error, clearErrors, isAuthenticated, loading } = authContext;
+  const { isAuthenticated } = authContext;
+  const { addCard, error, clearErrors, loading } = cardContext;
 
 	const numberRegExp = useMemo(() => /^[1-9]{1}[0-9]{15}$/, []);
   const expiryRegExp = useMemo(() => /^[0-9]{2}\/[0-9]{2}$/, []);
@@ -80,12 +95,28 @@ const AddCard = props => {
       setAlert('Please enter all fields', 'error');
 			return;
 		}
-    console.log(cvc.trim(), expiry.trim(), name.trim(), number.trim());
-    // register({
-    //   username,
-    //   email,
-    //   password
-    // });
+    const data = {
+      cvc: cvc,
+      number: number,
+      name: name.trim(),
+      expiaryDate: {
+        month : expiry.substring(0, 2),
+        year: expiry.substring(3, 5)
+      },
+    }
+    let flag = 0;
+    for(let key in supportedCards){
+      if(number.startsWith(key)) {
+        data.bank = supportedCards[key];
+        flag = 1;
+        break;
+      }
+    }
+    if(flag === 0) {
+      data.bank = 'Other';
+    }
+    console.log(data);
+    addCard(data);
   };
 
   const onNumberChange = e => {
@@ -127,7 +158,7 @@ const AddCard = props => {
                 autoFocus
                 value={number}
                 onChange={onNumberChange}
-                onFocus={({ currentTarget: { value } }) => setFocus(value)}
+                onFocus={({ currentTarget: { value } }) => setFocus('number')}
               />
             </Grid>
             <Grid item xs={12}>
@@ -142,7 +173,7 @@ const AddCard = props => {
                 label="Name"
                 value={name}
                 onChange={({ currentTarget: { value } }) => setName(value)}
-                onFocus={({ currentTarget: { value } }) => setFocus(value)}
+                onFocus={({ currentTarget: { value } }) => setFocus('name')}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -156,8 +187,8 @@ const AddCard = props => {
                 id="expiry"
                 label="Expiry"
                 value={expiry}
-                onChange={({ currentTarget: { value } }) => setExpiry(value)}
-                onFocus={({ currentTarget: { value } }) => setFocus(value)}
+                onChange={({ currentTarget: { value } }) => setExpiry(value.trim())}
+                onFocus={({ currentTarget: { value } }) => setFocus('expiry')}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -171,8 +202,8 @@ const AddCard = props => {
                 id="cvc"
                 label="CVC"
                 value={cvc}
-                onChange={({ currentTarget: { value } }) => setCvc(value)}
-                onFocus={({ currentTarget: { value } }) => setFocus(value)}
+                onChange={({ currentTarget: { value } }) => setCvc(value.trim())}
+                onFocus={({ currentTarget: { value } }) => setFocus('cvc')}
               />
             </Grid>
           </Grid>
