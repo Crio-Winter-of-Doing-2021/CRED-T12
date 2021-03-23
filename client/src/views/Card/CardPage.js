@@ -4,6 +4,8 @@ import { Route, Switch } from 'react-router-dom';
 import AddCard from "./AddCard.js";
 import AllCards from "./AllCards.js";
 
+import 'react-credit-cards/es/styles-compiled.css';
+
 export default function CardPage() {
   return (
     <>
