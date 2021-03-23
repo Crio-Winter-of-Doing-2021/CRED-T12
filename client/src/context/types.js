@@ -2,6 +2,7 @@ export const SET_LOADING = 'SET_LOADING';
 
 export const ADD_CARD_SUCCESS = 'ADD_CARD_SUCCESS';
 export const ADD_CARD_FAIL = 'ADD_CARD_FAIL';
+export const GET_ALL_CARDS_SUCCESS = 'GET_ALL_CARDS_SUCCESS';
 export const GET_ALL_CARDS_FAIL = 'GET_ALL_CARDS_FAIL';
 
 export const GET_CONTACTS = 'GET_CONTACTS';

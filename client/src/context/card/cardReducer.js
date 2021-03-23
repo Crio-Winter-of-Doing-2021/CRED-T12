@@ -2,6 +2,7 @@ import {
     SET_LOADING,
     ADD_CARD_SUCCESS,
     ADD_CARD_FAIL,
+    GET_ALL_CARDS_SUCCESS,
     GET_ALL_CARDS_FAIL,
     CLEAR_ERRORS,
 } from "../types";
@@ -18,6 +19,12 @@ export default (state, action) => {
             localStorage.setItem("token", action.payload.token);
             return {
                 ...state,
+                loading: false,
+            };
+        case GET_ALL_CARDS_SUCCESS:
+            return {
+                ...state,
+                allCards: action.payload,
                 loading: false,
             };
         case ADD_CARD_FAIL:
