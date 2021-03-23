@@ -4,6 +4,9 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
 import SingleCard from './SingleCard';
+import AlertContext from '../../context/alert/alertContext';
+import AuthContext from '../../context/auth/authContext';
+import CardContext from '../../context/card/cardContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,45 +23,24 @@ const useStyles = makeStyles((theme) => ({
 
 const AllCards = props => {
   const classes = useStyles();
+  const alertContext = useContext(AlertContext);
+  const authContext = useContext(AuthContext);
+  const cardContext = useContext(CardContext);
 
-  const data = [
-    {
-      bank: "visa",
-      cvc: "232",
-      expiaryDate: {
-      month: "12",
-      year: "23"
-      },
-      name: "Ashwani Yadav",
-      number: "4324324354546456"
-    },
-    {
-      bank: "visa",
-      cvc: "232",
-      expiaryDate: {
-      month: "12",
-      year: "23"
-      },
-      name: "Ashwani Yadav",
-      number: "5324324354546456"
-    },
-    {
-      bank: "visa",
-      cvc: "232",
-      expiaryDate: {
-      month: "12",
-      year: "23"
-      },
-      name: "Ashwani Yadav",
-      number: "6024324354546456"
-    }
-  ]
+  const { setAlert } = alertContext;
+  const { isAuthenticated } = authContext;
+  const { getAllCards, allCards, error, clearErrors, loading } = cardContext;
+
+  useEffect(() => {
+    getAllCards();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12}>
         <Grid container justify="center" spacing={2}>
-          {data.map((value) => (
+          {allCards && allCards.map((value) => (
             <Grid key={value.number} item>
               <SingleCard data={value} />
             </Grid>

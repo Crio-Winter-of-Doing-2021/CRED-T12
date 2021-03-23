@@ -58,7 +58,6 @@ export default function Header(props) {
     logout();
   };
 
-  console.log(window.location.href);
   return (
     <AppBar className={classes.appBar + appBarClasses}>
       <Toolbar className={classes.container}>

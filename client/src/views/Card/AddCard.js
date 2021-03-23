@@ -16,14 +16,39 @@ import AuthContext from '../../context/auth/authContext';
 import CardContext from '../../context/card/cardContext';
 
 const supportedCards = {
-  '506699': 'Elo',
-  '6011': 'Discover',
-  '37': 'american express',
-  '36': 'Diners Club International',
-  '55': 'mastercard',
-  '60': 'Hipercard',
-  '62': 'Union Pay',
-  '4': 'visa',
+  '4916114318775438': 'VISA',
+  '4532717078986054': 'VISA',
+  '4916960746371590778': 'VISA',
+  '5464097238279412': 'MasterCard',
+  '5591317939784650': 'MasterCard',
+  '5586406266205970': 'MasterCard',
+  '347700284258909': 'American Express (AMEX)',
+  '345434824190735': 'American Express (AMEX)',
+  '340386804617522': 'American Express (AMEX)',
+  '6011690025167497': 'Discover',
+  '6011127860248769': 'Discover',
+  '6011289828225840344': 'Discover',
+  '3589832437396350': 'JCB',
+  '3532889637693729': 'JCB',
+  '3536566605778201774': 'JCB',
+  '5536210731689821': 'Diners Club - North America',
+  '5592354044890618': 'Diners Club - North America',
+  '5487734674333351': 'Diners Club - North America',
+  '30049427459517': 'Diners Club - Carte Blanche',
+  '30066449956817': 'Diners Club - Carte Blanche',
+  '30454471777535': 'Diners Club - Carte Blanche',
+  '36240925857971': 'Diners Club - International',
+  '36106949075397': 'Diners Club - International',
+  '36331228422884': 'Diners Club - International',
+  '6763945122313067': 'Maestro',
+  '5038462505726189': 'Maestro',
+  '6762600153157963': 'Maestro',
+  '4175002239567552': 'Visa Electron',
+  '4917400771628803': 'Visa Electron',
+  '4508584887480236': 'Visa Electron',
+  '6396201755478974': 'InstaPayment',
+  '6395072787053866': 'InstaPayment',
+  '6380469452952454': 'InstaPayment'
 };
 
 
@@ -58,7 +83,6 @@ const AddCard = props => {
   const { isAuthenticated } = authContext;
   const { addCard, error, clearErrors, loading } = cardContext;
 
-	const numberRegExp = useMemo(() => /^[1-9]{1}[0-9]{15}$/, []);
   const expiryRegExp = useMemo(() => /^[0-9]{2}\/[0-9]{2}$/, []);
 
   const [cvc, setCvc] = useState('');
@@ -66,25 +90,25 @@ const AddCard = props => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const [focus, setFocus] = useState('');
-  const [isNumberValid, validateNumber] = useState(true);
   const [isExpiryValid, validateExpiry] = useState(true);
 
-  const isSubmitDisabled = !cvc.trim() || !expiry.trim() || !name.trim() || !number.trim() || !isNumberValid || !isExpiryValid;
+  const isSubmitDisabled = !cvc.trim() || !expiry.trim() || !name.trim() || !number.trim() || !isExpiryValid;
 
   useEffect(() => {
-		validateNumber(number && numberRegExp.test(number));
-	}, [number, numberRegExp]);
+    if (error) {
+      setAlert(error, 'error');
+      clearErrors();
+    }
+    // eslint-disable-next-line
+  }, [error]);
 
   useEffect(() => {
 		validateExpiry(expiry && expiryRegExp.test(expiry));
 	}, [expiry, expiryRegExp]);
 
-  const onSubmit = e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    if (!isNumberValid) {
-      setAlert('Please enter correct card number', 'error');
-			return;
-		}
+    
     if (!isExpiryValid) {
       setAlert('Please enter correct expiry format MM/YY', 'error');
 			return;
@@ -114,13 +138,13 @@ const AddCard = props => {
       data.bank = 'Other';
     }
     console.log(data);
-    addCard(data);
+    await addCard(data);
   };
 
   const onNumberChange = e => {
     e.preventDefault();
     let value = e.target.value.trim();
-    if(value.length > 16) return;
+    if(value.length > 19) return;
     setNumber(value);
   };
 

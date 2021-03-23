@@ -6,6 +6,7 @@ import cardReducer from "./cardReducer";
 import {
   ADD_CARD_SUCCESS,
   ADD_CARD_FAIL,
+  GET_ALL_CARDS_SUCCESS,
   GET_ALL_CARDS_FAIL,
   SET_LOADING,
   CLEAR_ERRORS,
@@ -34,18 +35,19 @@ const CardState = (props) => {
       dispatch({
         type: SET_LOADING,
       });
-      const res = await axios.post(`${ serverUrl }/user/login`, config);
+      const res = await axios.get(`${ serverUrl }/card/all`, config);
+      console.log(res.data.data);
 
       if(res.data.success === 'success') {
         dispatch({
-          type: ADD_CARD_SUCCESS,
+          type: GET_ALL_CARDS_SUCCESS,
           payload: res.data.data,
         });
         return;
       }
       dispatch({ 
         type: GET_ALL_CARDS_FAIL,
-        payload: "Couldn't add card!"
+        payload: res.data.message || "Error occurred!"
       });
     } catch (err) {
       dispatch({
@@ -81,7 +83,7 @@ const CardState = (props) => {
       }
       dispatch({ 
         type: ADD_CARD_FAIL,
-        payload: "Couldn't add card!"
+        payload: res.data.message || "Couldn't add card!"
       });
     } catch (err) {
       dispatch({
